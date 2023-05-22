@@ -244,8 +244,11 @@ class WoGen(Validator):
         """Show the banner
         clear the terminal before showing the WOGEN banner"""
 
-        os.system('printf "\033c" ')
-        print("\n" * 4)
+        if os.name == 'nt':  # if windows system
+            os.system('cls')  # clear terminal
+        else:  # For Unix/Linux/MacOS
+            os.system('clear')
+        print("\n\n\n\n")
         banner = [
             "......................................................",
             "'##:::::'##::'#######:::'######:::'########:'##::: ##:",
