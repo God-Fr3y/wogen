@@ -273,7 +273,11 @@ class WoGen(Validator):
 
         target_info = []
         # get the target personal info
-        target_names = ["firstname", "middlename", "lastname", "nickname", "username"]
+        target_names = ["firstname",
+                        "middlename",
+                        "lastname",
+                        "nickname",
+                        "username"]
         for name in target_names:
             target_info.append(self.name(name))
 
