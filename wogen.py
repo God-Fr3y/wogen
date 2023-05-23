@@ -244,10 +244,10 @@ class WoGen(Validator):
         """Show the banner
         clear the terminal before showing the WOGEN banner"""
 
-        if os.name == 'nt':  # if windows system
-            os.system('cls')  # clear terminal
+        if os.name == "nt":  # if windows system
+            os.system("cls")  # clear terminal
         else:  # For Unix/Linux/MacOS
-            os.system('clear')
+            os.system("clear")
         print("\n\n\n\n")
         banner = [
             "......................................................",
@@ -276,11 +276,7 @@ class WoGen(Validator):
 
         target_info = []
         # get the target personal info
-        target_names = ["firstname",
-                        "middlename",
-                        "lastname",
-                        "nickname",
-                        "username"]
+        target_names = ["firstname", "middlename", "lastname", "nickname", "username"]
         for name in target_names:
             target_info.append(self.name(name))
 
