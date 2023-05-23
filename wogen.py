@@ -248,7 +248,7 @@ class WoGen(Validator):
             os.system("cls")  # clear terminal
         else:  # For Unix/Linux/MacOS
             os.system("clear")
-        print("\n\n\n\n")
+
         banner = [
             "......................................................",
             "'##:::::'##::'#######:::'######:::'########:'##::: ##:",
@@ -266,6 +266,7 @@ class WoGen(Validator):
             print(COLOR_GREEN + design.center(width) + COLOR_RESET)
 
         print(COLOR_RED + "- GODFR3Y".center(width + 30) + COLOR_RESET)
+        print("\n\n\n\n")
 
     def get_data(self):
         """Collect data from user and
@@ -502,5 +503,6 @@ Finish in {timer} seconds"""
         self.finish(timer)
 
 
-WoGen().banner()
-WoGen().main()
+if '__main__' == __name__:
+    WoGen().banner()
+    WoGen().main()
