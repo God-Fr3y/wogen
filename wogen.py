@@ -399,30 +399,35 @@ class WoGen(Validator):
             break
         return num
 
+    def gen_pass(self, min_char, max_char, data, word_to_combine):
+        ''' GENERATOR FOR MILLIONS OF PASS '''
+
+        for num in range(1, word_to_combine + 1):
+            for datas in itertools.permutations(data, num + 1):
+                # join data in lowercase
+                passw = "".join(datas)
+
+                if len(passw) <= max_char and len(passw) >= min_char:
+                    # join data in capitalize
+                    cap_passw = "".join(datas).capitalize()
+
+                    # join data in title
+                    title_passw = "".join(dat.title() for dat in datas)
+
+                    if passw not in (cap_passw, title_passw):
+                        yield passw
+                        yield cap_passw
+                        yield title_passw
+
     def create(self, min_char, max_char, data, word_to_combine):
         """Open a new Wordlist.txt file
         Then put all created possible password
         Using permutation from the data gathered"""
 
         data = sorted(data, key=len)
-
         with open("Wordlist.txt", "w+", encoding="utf-8") as wordlist:
-            for num in range(1, word_to_combine + 1):
-                for datas in itertools.permutations(data, num + 1):
-                    # join data in lowercase
-                    passw = "".join(datas)
-
-                    if len(passw) <= max_char and len(passw) >= min_char:
-                        # join data in capitalize
-                        cap_passw = "".join(datas).capitalize()
-
-                        # join data in title
-                        title_passw = "".join(dat.title() for dat in datas)
-
-                        if passw not in (cap_passw, title_passw):
-                            wordlist.write(passw + "\n")
-                            wordlist.write(cap_passw + "\n")
-                            wordlist.write(title_passw + "\n")
+            for passw in self.gen_pass(min_char, max_char, data, word_to_combine):
+                wordlist.write(passw + "\n")
 
     def finish(self, timer):
         """Open the Wordlist.txt and read
