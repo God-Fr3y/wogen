@@ -310,7 +310,7 @@ class WoGen(Validator):
         for names in target_partner_names:
             target_info.append(self.name(names))
 
-        target_info.append(self.age("partner'_age"))
+        target_info.append(self.age("partner' age"))
         partner_dob = self.dob("dob").replace("/", "")
         target_info.append(partner_dob)
         target_info.append(partner_dob[:2])
