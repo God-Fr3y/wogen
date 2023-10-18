@@ -58,6 +58,28 @@ COLOR_RED = "\033[1;31;40m"  # red font
 COLOR_RESET = "\033[0;37;40m"  # reset font coloring
 
 
+def timer(func):
+    """TIMER DECORATOR"""
+    def wrapper(*args, **kwargs):
+        # start timer
+        timer_start = time.time()
+
+        # run main function
+        return_value = func(*args, **kwargs)
+
+        # end timer
+        timer_end = time.time()
+
+        # timer result
+        timer = round(timer_end - timer_start)
+        timer = datetime.timedelta(seconds=timer)
+
+        print(f"\nProgram finish in {timer} seconds!")
+
+        return return_value
+    return wrapper
+
+
 class Validator:
     """Class of function to validate user input
     in order to avoid any error while running the program
@@ -429,11 +451,9 @@ class WoGen(Validator):
             for passw in self.gen_pass(min_char, max_char, data, word_to_combine):
                 wordlist.write(passw + "\n")
 
-    def finish(self, timer):
+    def count_line(self):
         """Open the Wordlist.txt and read
         to determined how many passwords are created"""
-
-        timer = datetime.timedelta(seconds=timer)
 
         with open("Wordlist.txt", "r", encoding="utf-8") as wordlist:
             count = sum(1 for line in wordlist)
@@ -446,10 +466,7 @@ class WoGen(Validator):
 {COLOR_RED}The developer of this code is not responsible for any
 misuse of this tools.
 
-You have been warn! {COLOR_RESET}
-
-Finish in {timer} seconds"""
-            )
+You have been warn! {COLOR_RESET}""")
 
     def loading(self):
         """Display loading icon while generating"""
@@ -461,14 +478,12 @@ Finish in {timer} seconds"""
             sys.stdout.flush()
             time.sleep(0.1)
 
+    @timer
     def main(self):
         """Get the target info from the user by calling data() func
         Ask the user for minimum and maximum password length
         While creating show some motivational message
         If done, show how many password has been create"""
-
-        # start timer
-        timer_start = time.time()
 
         # get data from user
         data = self.get_data()
@@ -501,11 +516,8 @@ Finish in {timer} seconds"""
             else:
                 self.invalid()
 
-        # timer end
-        timer_end = time.time()
-
-        timer = round(timer_end - timer_start)
-        self.finish(timer)
+        # count create password
+        self.count_line()
 
 
 if '__main__' == __name__:
