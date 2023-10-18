@@ -58,7 +58,7 @@ COLOR_RED = "\033[1;31;40m"  # red font
 COLOR_RESET = "\033[0;37;40m"  # reset font coloring
 
 
-def timer(func):
+def count_time(func):
     """TIMER DECORATOR"""
     def wrapper(*args, **kwargs):
         # start timer
@@ -478,7 +478,7 @@ You have been warn! {COLOR_RESET}""")
             sys.stdout.flush()
             time.sleep(0.1)
 
-    @timer
+    @count_time
     def main(self):
         """Get the target info from the user by calling data() func
         Ask the user for minimum and maximum password length
