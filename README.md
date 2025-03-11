@@ -7,7 +7,7 @@ To install and use this tool on any terminal make sure that your machine already
 
 On terminal:
 
-$ git clone https://github.com/1Nc0gNi7o/wogen.git
+$ git clone https://github.com/God-Fr3y/wogen.git
 
 $ cd wogen
 
