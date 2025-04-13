@@ -42,6 +42,7 @@ import threading
 import re
 import datetime
 import itertools
+from itertools import product
 import shutil
 import phonenumbers
 from phonenumbers.phonenumberutil import NumberParseException
@@ -420,35 +421,136 @@ class WoGen(Validator):
                 continue
             break
         return num
+    
+    
+    def enable_leetspeak(self):
+    	""" Ask user if want to enable leet speak, then ask how many variants they want"""
+    	while True:
+    		enable = input("\nEnable leet speak? [y|n]: ").lower()
+    		if enable == "y":
+    			return True
+    			break
+    		elif enable == "n":
+    			return False
+    			break
+    		else:
+    			self.invalid()
 
-    def gen_pass(self, min_char, max_char, data, word_to_combine):
-        ''' GENERATOR FOR MILLIONS OF PASS '''
+    
+    
+    def leetspeak_maxvariants(self):
+    	""" Ask user on how many leet vairants should be made """
+    	while True:
+    		try:
+    			variants = int(input("\nHow many leetspeak variants to be made?: "))
+    		except ValueError:
+    			self.invalid()
+    			continue
+    		break
+    	return variants
 
-        for num in range(1, word_to_combine + 1):
-            for datas in itertools.permutations(data, num + 1):
-                # join data in lowercase
-                passw = "".join(datas)
 
-                if len(passw) <= max_char and len(passw) >= min_char:
-                    # join data in capitalize
-                    cap_passw = "".join(datas).capitalize()
 
-                    # join data in title
-                    title_passw = "".join(dat.title() for dat in datas)
+    def leetspeak(self, word, max_variants):
+    	"""Generate advanced leetspeak variants of a word using full substitution map. Returns up to `max_variants` results. """
+    	
+    	LEET_MAP = {
+			'a': ['@', '4', '/\\', '^', 'α'],
+	    	'b': ['8', 'ß', '|3', '13'],
+    		'c': ['<', '(', '{', '[', '¢'],
+    		'd': ['|)', 'cl', 'Ð'],
+    		'e': ['3', '€', '&'],
+    		'f': ['|=', 'ph', 'ƒ'],
+    		'g': ['6', '9', '&', '(_+'],
+    		'h': ['#', '|-|', ']-[', ')-(', '}{'],
+    		'i': ['1', '!', '|', 'eye', ']['],
+    		'j': ['_|', '_/'],
+    		'k': ['|<', '|{', 'X'],
+    		'l': ['1', '|', '£', '¬'],
+    		'm': ['|\/|', '/\/\\', '(V)', '^^'],
+    		'n': ['|\|', '/\/', '^/'],
+    		'o': ['0', '()', '*', '°'],
+    		'p': ['|*', '|o', '|>', '9'],
+    		'q': ['0_', 'kw', 'O,'],
+    		'r': ['|2', '®', '12'],
+    		's': ['$', '5', '§'],
+    		't': ['7', '+', '†'],
+    		'u': ['|_|', 'µ', '[_]'],
+    		'v': ['\/', '|/', '\\|'],
+    		'w': ['\/\/', 'vv', '\^/', '\\/\\/', 'uu'],
+    		'x': ['><', '}{', '×'],
+    		'y': ['`/', '¥', 'j'],
+    		'z': ['2', '≥', '"/_']}
+    	
 
-                    if passw not in (cap_passw, title_passw):
-                        yield passw
-                        yield cap_passw
-                        yield title_passw
+    	word = word.lower()
+    	chars = []
+    	max_variants = 10
+    	
+    	for char in word:
+    		if char in LEET_MAP:
+    			chars.append([char] + LEET_MAP[char])  # include original + substitutions
+    		else:
+    			chars.append([char])
+    	
+    	variants = set()
+    	for combo in product(*chars):
+    		variants.add(''.join(combo))
+    		if len(variants) >= max_variants:
+    			break
+    	
+    	return variants
+    
+    def extract_initials(self, data):
+    	"""Extracts the first letter from string elements"""
+    	return [d[0] for d in data if d and d[0].isalpha()]
 
-    def create(self, min_char, max_char, data, word_to_combine):
+
+    def gen_pass(self, min_char, max_char, data, word_to_combine, is_leet, max_variants):
+    	'''Enhanced password generator with initials, leetspeak, and deduplication'''
+    
+    	seen = set()
+    	full_data = data.copy()
+    	
+    	initials = self.extract_initials(data)
+    	full_data += initials
+    	
+    	for num in range(1, word_to_combine + 1):
+    		for combo in itertools.permutations(full_data, num):
+    			base = ''.join(combo)
+    			
+    			if min_char <= len(base) <= max_char:
+    				variants = {
+    					base,
+    					base.lower(),
+    					base.upper(),
+    					base.capitalize(),
+    					''.join([w.capitalize() for w in combo]),  # TitleCase
+    					}
+    				
+					# If want to enable leet speak
+    				if is_leet:
+    					new_variants = set()
+    					for v in variants:
+    						new_variants.update(self.leetspeak(v, max_variants))
+    				
+    					variants.update(new_variants)
+
+    				
+    				for pwd in variants:
+    					if pwd not in seen:
+    						seen.add(pwd)
+    						yield pwd
+
+
+    def create(self, min_char, max_char, data, word_to_combine, is_leet=False, max_variants=0):
         """Open a new Wordlist.txt file
         Then put all created possible password
         Using permutation from the data gathered"""
 
         data = sorted(data, key=len)
         with open("Wordlist.txt", "w+", encoding="utf-8") as wordlist:
-            for passw in self.gen_pass(min_char, max_char, data, word_to_combine):
+            for passw in self.gen_pass(min_char, max_char, data, word_to_combine, is_leet, max_variants):
                 wordlist.write(passw + "\n")
 
     def count_line(self):
@@ -496,6 +598,16 @@ You have been warn! {COLOR_RESET}""")
 
         # get the max number of data to combine
         word_to_combine = self.word_to_combine()
+        
+        # ask if want to enable leet speak
+        is_leet = self.enable_leetspeak()
+
+        
+        if is_leet:
+        	# if want to enable leetspeak ask for how many variants else do nothing
+        	max_variants = self.leetspeak_maxvariants()
+        else:
+        	max_variants = 0
 
         # ask the user to generate or not
         # if y generate elif n quit else ask again
@@ -505,8 +617,11 @@ You have been warn! {COLOR_RESET}""")
                 self.run_loading = True
                 loading = threading.Thread(target=self.loading)
                 loading.start()
-
-                self.create(min_char, max_char, data, word_to_combine)
+                
+                if is_leet:
+                	self.create(min_char, max_char, data, word_to_combine, is_leet, max_variants)
+                else:
+                	self.create(min_char, max_char, data, word_to_combine, is_leet=False, max_variants=0)
 
                 self.run_loading = False
                 break
