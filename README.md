@@ -23,6 +23,7 @@ WoGen is a powerful and customizable wordlist generator written in Python. It al
 
 git clone 
 https://github.com/God-Fr3y/wogen.git
+
 cd wogen
 
 2. **Install the required dependencies:**
