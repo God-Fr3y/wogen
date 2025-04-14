@@ -25,6 +25,9 @@ git clone https://github.com/your-username/wogen.git
 
 cd wogen
 
+**Install the required dependencies**
+
+pip install phonenumbers
 
 ## Usage
 
