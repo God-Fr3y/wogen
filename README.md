@@ -19,9 +19,10 @@ WoGen is a powerful and customizable wordlist generator written in Python. It al
 
 ## Installation
 
-1. **Clone the repository:**
+**Clone the repository:**
 
 git clone https://github.com/your-username/wogen.git
+
 cd wogen
 
 
