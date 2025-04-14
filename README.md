@@ -1,21 +1,30 @@
-# wogen
-Wordlist Generator used by pentester to create millions of possible password in just a minutes. Password will be base on the target's info.
+# WoGen - Wordlist Generator
+
+WoGen is a powerful and customizable wordlist generator written in Python. It allows you to gather detailed personal data and generate complex wordlists for password recovery, penetration testing, or security auditing purposes. Features include leetspeak transformation, intelligent permutations, and flexible output options.
+
+> **Disclaimer**: This tool is intended for educational and ethical use only. Unauthorized use of this tool against systems without explicit permission is strictly prohibited.
+
+---
+
+## Features
+
+- Collect target information through interactive prompts
+- Smart initials extraction
+- Optional advanced leetspeak transformations
+- Customize minimum and maximum password lengths
+- Choose how many data combinations to include
+- Generate and save a comprehensive wordlist to `Wordlist.txt`
+
+---
+
+## Installation
+
+1. **Clone the repository:**
+
+git clone https://github.com/your-username/wogen.git
+cd wogen
 
 
-To install and use this tool on any terminal make sure that your machine already have python3 and git package
+## Usage
 
-
-On terminal:
-
-$ git clone https://github.com/God-Fr3y/wogen.git
-
-$ cd wogen
-
-$ pip install -r requirements.txt
-
-$ python wogen.py
-
-
-
-
-THE DEVELOPER OF THIS TOOL IS NOT RESPONSIBLE FOR ANY ILLEGAL USE. PLEASE USE THIS AT YOUR OWN RISK
+python3 wogen.py
