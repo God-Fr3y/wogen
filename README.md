@@ -21,14 +21,15 @@ WoGen is a powerful and customizable wordlist generator written in Python. It al
 
 1. **Clone the repository:**
 
+```bash
 git clone https://github.com/God-Fr3y/wogen.git
-
 cd wogen
-
+```
 2. **Install the required dependencies:**
-
+```bash
 sudo apt install python3-phonenumbers
-
+```
 ## Usage
-
+```bash
 python3 wogen.py
+```
