@@ -70,10 +70,10 @@ from phonenumbers import PhoneNumberFormat as CpNoFrmt
 width, height = shutil.get_terminal_size()
 
 # ANSI escape sequences for terminal font coloring
-COLOR_GREEN = "\033[1;32;40m"   # Bright green text on black background
-COLOR_RED = "\033[1;31;40m"     # Bright red text on black background
-COLOR_BLUE = "\033[1;34;40m"  # Bright blue text on black background
-COLOR_RESET = "\033[0;37;40m"   # Reset to default (light gray on black)
+COLOR_GREEN = "\033[92m"        # Bright green foreground
+COLOR_RED = "\033[91m"          # Bright red foreground
+COLOR_BLUE = "\033[94m"          # Bright blue foreground 
+COLOR_RESET = "\033[0m"         # Reset to terminal default
 
 
 
@@ -310,12 +310,13 @@ class Validator:
         Returns:
             list or None: A list of symbols, or None if input is empty.
         """
-        print("\n")
+        print("\n\n\n")
         msg = "Including symbols can make your wordlist stronger"
         syms = "@#$_&-+()/"
         print(msg.center(width))
         print(syms.center(width))
-
+        
+        print("\n\n\n")
         while True:
             symbols = input(f"\n-》{data.capitalize()}: ").strip()
             if not symbols:
@@ -346,7 +347,7 @@ class Validator:
         Returns:
             list: A list of additional words provided by the user.
         """
-        print("\n")
+        print("\n\n\n")
         prompts = [
             "Add some words that could be part of a possible password.",
             "Examples: favorite food, place, pet name, hobby, etc.",
@@ -422,14 +423,14 @@ class WoGen(Validator):
             " ##: ##: ##: ##:::: ##: ##::: ##:: ##::::::: ##:. ###:",
             ". ###. ###::. #######::. ######::: ########: ##::. ##:",
             ":...::...::::.......::::......::::........::..::::..::",
-            "'''''''''''''’''''''''''''''''''''''''''''''''''''''''",
+            "''''''''''''''''''''''''''''''''''''''''''''''''''''''",
         ]
 
         for design in banner:
             print(COLOR_GREEN + design.center(width) + COLOR_RESET)
 
-        print(COLOR_BLUE + "- GODFR3Y".center(width + 30) + COLOR_RESET)
-        print("\n\n\n\n")
+        print(COLOR_BLUE + "- GODFR3Y".center(width + 45) + COLOR_RESET)
+        print("\n\n\n\n\n\n\n")
 
 
 
@@ -441,7 +442,7 @@ class WoGen(Validator):
         Returns:
             tuple: Cleaned and validated target data.
         """
-        print("\n\n\n\nPlease provide all information when prompted.")
+        print("Provide all the information when prompted.")
         print("Press Enter to skip any field\n")
 
         target_info = []
@@ -463,7 +464,7 @@ class WoGen(Validator):
         target_info.append(self.phone("phonenumber"))
         target_info.append(self.email("email"))
 
-        print("\n")
+        print("\n\n\n")
         for msg in [
             "Some additional information based on the",
             "target's life partner can be useful",
@@ -472,6 +473,7 @@ class WoGen(Validator):
             print(msg.center(width))
 
         # Collect partner's personal information
+        print("\n\n\n")
         partner_fields = [
             "partner's firstname", "partner's middlename", "partner's lastname",
             "partner's nickname", "partner's username"
@@ -520,7 +522,7 @@ class WoGen(Validator):
         """
         while True:
             try:
-                min_char = int(input("\nMinimum password length: "))
+                min_char = int(input("\n-》Minimum password length: "))
                 if min_char <= 0:
                     self.invalid()
                     continue
@@ -539,7 +541,7 @@ class WoGen(Validator):
         """
         while True:
             try:
-                max_char = int(input("\nMaximum password length: "))
+                max_char = int(input("\n-》Maximum password length: "))
                 if max_char <= 0 or max_char <= min_char:
                     self.invalid()
                     continue
@@ -557,26 +559,26 @@ class WoGen(Validator):
         Displays an informative guide and warns that higher values increase processing time.
         """
         msgs = [
-            "\n",
-            "\b",
-            "Data:  a b c d",
-            "\n",
-            "2       3       4",
-            "ab      abc     abcd",
-            "ac      abd     abdc",
-            "ad      acb     acbd",
-            "ba      acd     acdb",
-        ]
+                "\n",
+                "\b",
+                "Data:  a b c d",
+                "\n",
+                "2       3       4",
+                "ab      abc     abcd",
+                "ac      abd     abdc",
+                "ad      acb     acbd",
+                "ba      acd     acdb",
+                ]
 
         for msg in msgs:
             print(msg.center(width))
 
-        print("\n\n" + "WARNING! The higher the number,")
+        print("\n\n" + "WARNING! The higher the number,".center(width))
         print("the longer it takes to create.".center(width))
 
         while True:
             try:
-                num = int(input("\nUp to how many data to combine: "))
+                num = int(input("\n\n\n-》Up to how many data to combine: "))
                 return num  # Exits the loop and returns if input is valid
             except ValueError:
                 self.invalid()
@@ -590,8 +592,30 @@ class WoGen(Validator):
         Returns:
             bool: True if leetspeak is enabled, False otherwise.
         """
+        
+  
+        sample = {
+                    "a": ["@", "4"],
+                    "e": ["3", "€"],
+                    "i": ["1", "!"],
+                    "o": ["0", "°"],
+                    "s": ["$", "5"],
+                    "t": ["7", "+"]
+                }
+
+        print("\n\n\nLeetspeak converts letters into special characters or numbers.")
+        print("Here are some common examples:\n")
+
+        print("Character     =>   Leetspeak".center(width))
+        
+
+        for char, leet_variants in sample.items():
+            leets = ", ".join(leet_variants)
+            print(f"   {char.upper()}        =>     {leets}".center(width))
+       
+
         while True:
-            choice = input("\nEnable leet speak? [y|n]: ").strip().lower()
+            choice = input("\n\n\n-》Enable leet speak? [y|n]: ").strip().lower()
             if choice == "y":
                 return True  # Return immediately if enabled
             elif choice == "n":
@@ -607,9 +631,22 @@ class WoGen(Validator):
         Returns:
             int: The number of leetspeak variants specified by the user.
         """
+
+        leet_sam = [
+                    "   1              2               3    ",
+                    "p@ssw0rd       p@ssw0rd        p@ssw0rd",
+                    "               pa$$w0rd        pa$$w0rd",
+                    "                               p4$$wOrd"
+                    ]
+        
+        print("\n\n\n")
+        for leet in leet_sam:
+            print(leet.center(width))
+
+        print("\n\n\n")
         while True:
             try:
-                variants = int(input("\nHow many leetspeak variants to be made?: "))
+                variants = int(input("-》How many leetspeak variants to be made?: "))
                 break
             except ValueError:
                 self.invalid()
@@ -618,67 +655,109 @@ class WoGen(Validator):
 
 
 
-    def leetspeak(self, word, max_variants):
+    def leetspeak_level(self):
         """
-        Generate advanced leetspeak variants of a word using a comprehensive substitution map.
+        Prompt the user to enter the level of leet to be made.
+            1 - Vowels only
+            2 - Even index letters
+            3 - Odd index letters
+            4 - All characters
+        """
+        
+        info = [
+                "Level      Description                                  Output  ",
+                "  1        Only a,e,i,o,u                              P4ssw0rdz",
+                "  2        Chars at even indexes (0,2,4...)            P@ssw0rdz",
+                "  3        Chars at odd indexes (1,3,5...)             P4$sw0rdz",
+                "   4        All possible leet-eligible chars            P4$$vv0rd2"
+                ]
+
+        print("\n\n\n")
+        for msg in info:
+            print(msg.center(width))
+
+        # Ask for leet level
+        print("\n\n\n")
+        while True:
+            try:
+                level = int(input("-》Enter the leetspeak level: "))
+                break
+            except ValueError:
+                self.invalid()
+                continue
+        
+        return level
+
+
+
+
+    def leetspeak(self, word, max_variants, leet_level):
+        """
+        Generate leetspeak variants while preserving the original casing.
 
         Parameters:
-            word (str): The input word to be converted into leetspeak.
-            max_variants (int): The maximum number of leetspeak variants to generate.
+            word (str): Input word (case preserved).
+            max_variants (int): Max number of leetspeak variants.
+            leet_level (int): 
+                1 - Vowels only
+                2 - Even index letters
+                3 - Odd index letters
+                4 - All characters
 
         Returns:
-            set: A set containing up to `max_variants` leetspeak variations of the input word.
+            set: Set of unique leetspeak variants.
         """
 
-        # Full leetspeak substitution map for each character
         LEET_MAP = {
-            'a': ['@', '4', '/\\', '^', 'α'],
-            'b': ['8', 'ß', '|3', '13'],
-            'c': ['<', '(', '{', '[', '¢'],
-            'd': ['|)', 'cl', 'Ð'],
-            'e': ['3', '€', '&'],
-            'f': ['|=', 'ph', 'ƒ'],
-            'g': ['6', '9', '&', '(_+'],
-            'h': ['#', '|-|', ']-[', ')-(', '}{'],
-            'i': ['1', '!', '|', 'eye', ']['],
-            'j': ['_|', '_/'],
-            'k': ['|<', '|{', 'X'],
-            'l': ['1', '|', '£', '¬'],
-            'm': ['|\\/|', '/\\/\\', '(V)', '^^'],
-            'n': ['|\\|', '/\\/', '^/'],
-            'o': ['0', '()', '*', '°'],
-            'p': ['|*', '|o', '|>', '9'],
-            'q': ['0_', 'kw', 'O,'],
-            'r': ['|2', '®', '12'],
-            's': ['$', '5', '§'],
-            't': ['7', '+', '†'],
-            'u': ['|_|', 'µ', '[_]'],
-            'v': ['\\/', '|/', '\\|'],
-            'w': ['\\/\\/', 'vv', '\\^/', '\\/\\/', 'uu'],
-            'x': ['><', '}{', '×'],
-            'y': ['`/', '¥', 'j'],
-            'z': ['2', '≥', '"/_']
+            'a': ['4', '@'],
+            'b': ['8'],
+            'c': ['('],
+            'e': ['3'],
+            'g': ['9'],
+            'i': ['!', '1'],
+            'l': ['|', '1'],
+            'o': ['0'],
+            's': ['$', '5'],
+            't': ['7', '+'],
+            'w': ['vv'],
+            'x': ['><'],
+            'z': ['2']
         }
 
-        word = word.lower()  # Normalize the word to lowercase
+        VOWELS = set("aeiouAEIOU")
+
         chars = []
 
-        # Build a list of possible substitutions for each character
-        for char in word:
-            substitutions = [char] + LEET_MAP.get(char, [])  # Include the original character
-            chars.append(substitutions)
+        for idx, char in enumerate(word):
+            base_char = char.lower()
+            substitutions = LEET_MAP.get(base_char)
+
+            # Should we apply substitution at this position?
+            use_leet = False
+            if leet_level == 1:
+                use_leet = char in VOWELS and substitutions
+            elif leet_level == 2:
+                use_leet = idx % 2 == 0 and substitutions
+            elif leet_level == 3:
+                use_leet = idx % 2 != 0 and substitutions
+            elif leet_level == 4:
+                use_leet = substitutions is not None
+
+            # Apply leet or keep original
+            if use_leet:
+                chars.append(substitutions)
+            else:
+                chars.append([char])
 
         variants = set()
 
-        # Generate all possible combinations using Cartesian product
         for combo in product(*chars):
             variant = ''.join(combo)
             variants.add(variant)
-            if len(variants) >= max_variants:  # Stop when we reach the desired number of variants
+            if len(variants) >= max_variants:
                 break
 
         return variants
-
 
 
     def extract_initials(self, data):
@@ -695,7 +774,7 @@ class WoGen(Validator):
 
 
 
-    def gen_pass(self, min_char, max_char, data, word_to_combine, is_leet, max_variants):
+    def gen_pass(self, min_char, max_char, data, word_to_combine, is_leet, max_variants, leet_level):
         """
         Generate passwords by combining words, applying capitalization styles,
         optionally adding leetspeak variants, and filtering by length.
@@ -736,7 +815,7 @@ class WoGen(Validator):
                     if is_leet:
                         leet_variants = set()
                         for v in variants:
-                            leet_variants.update(self.leetspeak(v, max_variants))
+                            leet_variants.update(self.leetspeak(v, max_variants, leet_level))
                         variants.update(leet_variants)
 
                     # Yield only unique passwords
@@ -747,7 +826,7 @@ class WoGen(Validator):
 
 
 
-    def create(self, min_char, max_char, data, word_to_combine, is_leet=False, max_variants=0):
+    def create(self, min_char, max_char, data, word_to_combine, is_leet=False, max_variants=0, leet_level=1):
         """
         Create a wordlist of generated passwords and save them to a file.
         
@@ -773,7 +852,7 @@ class WoGen(Validator):
         # Open the Wordlist.txt file in write mode
         with open("Wordlist.txt", "w+", encoding="utf-8") as wordlist:
             # Generate passwords using the gen_pass method and write them to the file
-            for passw in self.gen_pass(min_char, max_char, data, word_to_combine, is_leet, max_variants):
+            for passw in self.gen_pass(min_char, max_char, data, word_to_combine, is_leet, max_variants, leet_level):
                 wordlist.write(passw + "\n")
 
 
@@ -831,6 +910,7 @@ class WoGen(Validator):
         # Step 6: If leetspeak is enabled, ask how many variants to generate
         if is_leet:
             max_variants = self.leetspeak_maxvariants()
+            leet_level = self.leetspeak_level()
         else:
             max_variants = 0
 
